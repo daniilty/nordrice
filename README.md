@@ -1,5 +1,5 @@
 <h1 align="center"> That's how da setup looks like</h1>
-<img src="screenshot.png" alt="scr"></img>
+<img src="scr.png" alt="scr"></img>
 <h2>Stuff you'll need:</h2>
 <ul>
 	<li>compton-tryone fork</li>
