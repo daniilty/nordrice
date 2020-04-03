@@ -1,0 +1,324 @@
+[colors]
+background = #2E3440
+background-alt = #484848
+foreground-alt = #141414
+foreground #141414
+primary = #ffb52a
+secondary = #E84A5F
+alert = #E84A5F 
+
+
+[bar/example]
+enable-ipc = true
+tray-position = none
+width = 100%
+height = 20
+radius = 0
+fixed-center = true
+wm-restack = bspwm
+#override-redirect = true
+
+background = #2E3440
+foreground = #ffffff
+
+line-size = 3
+line-color = #f00
+
+border-size = 0
+border-color = #ffffff
+
+padding-left = 0
+padding-right = 2
+
+module-margin-left = 2
+module-margin-right = 2
+font-0 = Hack:pixelsize=10;1
+font-1 = Siji:style=Regular:pixelsize=9;0 
+font-2 = Siji:style=Regular:pixelsize=9;0
+font-3 = Siji:style=Regular:pixelsize=9;0
+modules-left = bspwm i3
+modules-center = date
+modules-right = xkeyboard volume wireless battery
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+strip-wsnumbers = false
+
+; Only show workspaces on the same output as the bar
+;pin-workspaces = true
+
+label-mode-padding = 0
+label-mode-foreground = #ffffff
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %name%
+label-focused-background = #2E3440
+label-focused-foreground = #ffffff
+label-focused-padding = 1
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %name%
+label-unfocused-foreground = #484848
+label-unfocused-padding = 1
+
+; visible = Active workspace on unfocused monitor
+label-visible = %name%
+label-visible-background = ${self.label-focused-background}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %name%
+label-urgent-background = #ffffff
+label-urgent-padding = 1
+
+
+
+[module/title]
+type = internal/xwindow
+; Available tags:
+;   <label> (default)
+format = <label>
+format-foreground = #ffffff
+format-padding = 0
+
+label = %title%
+label-maxlen = 50
+
+; Used instead of label when there is no window title
+; Available tokens:
+;   None
+label-empty = 
+
+[module/player-cmus]
+type = custom/script
+exec = ~/.config/polybar/cmus.sh
+label =%output%
+format-prefix = "np: "
+format-prefix-foreground = #484848
+exec-if = cmus-remote -Q
+interval = 1
+click-left = cmus-remote -n
+click-right = cmus-remote -r
+click-middle = ~/polybar-scripts/player-cmus.sh --toggle
+
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+blacklist-1 = caps lock
+
+format-prefix-foreground = #ffffff
+label-layout = %layout% 
+format = <label-layout>
+label-indicator-padding = 2
+label-indicator-margin = 1
+label-indicator-background = #2E3440
+
+[module/bspwm]
+type = internal/bspwm
+
+label-focused = %index%:%name%
+label-focused-padding = 1
+
+label-occupied = %index%:%name%
+label-occupied-foreground = #484848
+label-occupied-padding = 1
+
+label-urgent = %index%!
+label-urgent-background = #2E3440
+label-urgent-padding = 1
+
+label-empty = 
+
+[module/wireless]
+type = internal/network
+interface = wlp5s0
+interval = 3.0
+
+format-connected-prefix = " "
+format-connected-prefix-foreground = #ffffff
+label-connected = %essid%
+
+format-disconnected = 
+label-disconnected = %ifname% disconnected
+label-disconnected-foreground = #ffffff
+
+[module/openvpn]
+type = internal/network
+interface = tun0
+interval = 3.0
+
+format-connected-prefix = "tun0: "
+format-connected-prefix-foreground = #ffffff
+label-connected = on
+
+format-disconnected-prefix = "tun0: "
+format-disconnected-prefix-foreground = #ffffff
+label-disconnected = off
+
+[module/eth]
+type = internal/network
+interface = enp4s0
+interval = 3.0
+
+format-connected-underline = #ffffff
+format-connected-prefix = " "
+format-connected-prefix-foreground = #ffffff
+label-connected = %local_ip%
+
+format-disconnected =
+
+[module/volume]
+type = internal/alsa
+
+; Soundcard to be used
+; Usually in the format hw:# where # is the card number
+; You can find the different card numbers in `/proc/asound/cards`
+;;master-soundcard = default
+;;speaker-soundcard = default
+;;headphone-soundcard = default
+
+; Name of the master, speaker and headphone mixers
+; Use the following command to list available mixer controls:
+; $ amixer scontrols | sed -nr "s/.*'([[:alnum:]]+)'.*/\1/p"
+; If master, speaker or headphone-soundcard isn't the default, 
+; use `amixer -c # scontrols` instead where # is the number 
+; of the master, speaker or headphone soundcard respectively
+;
+; Default: Master
+;;master-mixer = Master
+
+; Optionally define speaker and headphone mixers
+; Default: none
+;;speaker-mixer = Speaker
+; Default: none
+;;headphone-mixer = Headphone
+
+; NOTE: This is required if headphone_mixer is defined
+; Use the following command to list available device controls
+; $ amixer controls | sed -r "/CARD/\!d; s/.*=([0-9]+).*name='([^']+)'.*/printf '%3.0f: %s\n' '\1' '\2'/e" | sort
+; You may also need to use `amixer -c # controls` as above for the mixer names
+; Default: none
+;;headphone-id = 9
+
+; Use volume mapping (similar to amixer -M and alsamixer), where the increase in volume is linear to the ear
+; Default: false
+;;mapped = true
+
+; Interval for volume increase/decrease (in percent points)
+; Default: 5
+;;interval = 5
+
+; Available tags:
+;   <label-volume> (default)
+;   <ramp-volume>
+;   <bar-volume>
+format-volume = <ramp-volume> <bar-volume>
+
+; Available tags:
+;   <label-muted> (default)
+;   <ramp-volume>
+;   <bar-volume>
+format-muted = <label-muted>
+
+; Available tokens:
+;   %percentage% (default)
+label-volume = %percentage%%
+
+; Available tokens:
+;   %percentage% (default
+format-muted-prefix = 
+label-muted = " Muted"
+label-muted-foreground = #ffffff
+; Only applies if <ramp-volume> is used
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+ramp-volume-3 = 
+ramp-volume-4 = 
+
+; Only applies if <bar-volume> is used
+bar-volume-width = 10
+bar-volume-gradient = false
+
+bar-volume-indicator = 
+bar-volume-indicator-foreground = #ffffff 
+bar-volume-indicator-font = 2
+
+bar-volume-fill = ━
+bar-volume-foreground-0 = #ffffff 
+bar-volume-foreground-1 = #ffffff
+bar-volume-foreground-2 = #ffffff
+bar-volume-foreground-3 = #ffffff
+bar-volume-foreground-4 = #ffffff
+bar-volume-foreground-5 = #ffffff
+bar-volume-foreground-6 = #ffffff
+bar-volume-foreground-7 = #ffffff
+bar-volume-foreground-8 = #ffffff
+bar-volume-fill-font = 2
+
+bar-volume-empty = ┉
+bar-volume-empty-foreground = #ffffff 
+bar-volume-empty-font = 2
+
+; If defined, it will replace <ramp-volume> when
+; headphones are plugged in to `headphone_control_numid`
+; If undefined, <ramp-volume> will be used for both
+; Only applies if <ramp-volume> is used
+ramp-headphones-0 = 
+ramp-headphones-1 = 
+
+
+[module/date]
+type = internal/date
+interval = 5
+
+date = %a 
+date-alt = " %Y-%m-%d"
+
+time = %H:%M
+time-alt = %H:%M:%S
+
+format-prefix-foreground = #ffffff
+
+label = %date% %time%
+
+[module/battery]
+type = internal/battery
+battery = BAT0
+adapter = AC
+full-at = 98
+
+format-charging-prefix = " " 
+format-charging-prefix-foreground = #ffffff
+
+format-discharging-prefix = " "
+format-discharging-prefix-foreground = #ffffff
+
+format-full-prefix = " "
+format-full-prefix-foreground = #ffffff
+
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 70
+
+format = <label>
+format-warn = <label-warn>
+
+label = %temperature-c%
+label-foreground = #484848
+label-warn = %temperature-c%
+label-warn-foreground = #ffffff
+
+ramp-0 = 
+ramp-1 = 
+ramp-2 = 
+ramp-foreground = #ffffff
+
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
